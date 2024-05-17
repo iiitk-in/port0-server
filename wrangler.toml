@@ -1,8 +1,15 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "port0-server"
-main = "src/index.js"
-compatibility_date = "2024-04-19"
+main = "src/index.ts"
+compatibility_date = "2024-05-12"
 compatibility_flags = ["nodejs_compat"]
+
+# Automatically place your workloads in an optimal location to minimize latency.
+# If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
+# rather than the end user may result in better performance.
+# Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+# [placement]
+# mode = "smart"
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Docs:
@@ -29,10 +36,10 @@ compatibility_flags = ["nodejs_compat"]
 
 # Bind a D1 database. D1 is Cloudflare’s native serverless SQL database.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#d1-databases
-[[d1_databases]]
-binding = "DB"
-database_name = "prod-port0"
-database_id = "c259c0aa-9bbc-4fec-9596-7260c287dbd0"
+# [[d1_databases]]
+# binding = "MY_DB"
+# database_name = "my-database"
+# database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 # Bind a dispatch namespace. Use Workers for Platforms to deploy serverless functions programmatically on behalf of your customers.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#dispatch-namespace-bindings-workers-for-platforms
@@ -99,13 +106,3 @@ database_id = "c259c0aa-9bbc-4fec-9596-7260c287dbd0"
 # [[vectorize]]
 # binding = "MY_INDEX"
 # index_name = "my-index"
-
-[[unsafe.bindings]]
-name = "IP_Rate"
-type = "ratelimit"
-namespace_id = "1001"
-
-# Limit: the number of tokens allowed within a given period in a single
-# Cloudflare location
-# Period: the duration of the period, in seconds. Must be either 10 or 60
-simple = { limit = 5, period = 60 }
