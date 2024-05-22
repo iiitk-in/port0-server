@@ -26,5 +26,8 @@ export default async function register(c: Context) {
 	const otp = Array.from({ length: 6 }, getRandomDigit).join('');
 	sendOTP(email, otp);
 
-	return c.status(200);
+	return c.json({
+		status: 'success',
+		data: null,
+	});
 }

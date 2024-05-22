@@ -29,6 +29,7 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@tsndr/cloudflare-worker-jwt": "^2.5.3",
     "hono": "^4.3.9"
   }
 }
