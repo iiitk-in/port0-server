@@ -1,7 +1,6 @@
 import { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 
-
 export default async function create(c: Context) {
 	let body;
 	try {
