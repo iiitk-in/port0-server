@@ -22,11 +22,19 @@ export default async function verify(c: Context) {
 	if (!otp || !otpPattern.test(otp) || !email || !emailPattern.test(email)) {
 		throw new HTTPException(401);
 	}
-
+	const token = await createJWT(email);
+	const stmt = `INSERT INTO users (email, token) VALUES ($1, $2)`;
+	const values = [email, token];
+	try {
+		await c.env.DB.prepare.query(stmt, values);
+	} catch (e) {
+		throw new HTTPException(500);
+	}
+	
 	return c.json({
 		status: 'success',
 		data: {
-			token: await createJWT(email),
+			token: token,
 		},
 	});
 }
