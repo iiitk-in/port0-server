@@ -30,7 +30,7 @@ export default async function verify(c: Context) {
 	} catch (e) {
 		throw new HTTPException(500);
 	}
-	
+
 	return c.json({
 		status: 'success',
 		data: {
