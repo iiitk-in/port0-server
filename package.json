@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@tsndr/cloudflare-worker-jwt": "^2.5.3",
+		"cors": "^2.8.5",
 		"hono": "^4.3.9"
 	}
 }

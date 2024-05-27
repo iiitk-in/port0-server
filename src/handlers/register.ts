@@ -8,6 +8,7 @@ function getRandomDigit() {
 }
 function sendOTP(email: string, otp: string) {
 	// Send OTP to email
+	return true;
 }
 
 export default async function register(c: Context) {
