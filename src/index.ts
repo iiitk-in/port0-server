@@ -21,5 +21,10 @@ app.use(
 app.post('/auth/register', register);
 app.post('/auth/verify', verify);
 app.post('/auth/create', create); // New route
-
+app.get('/', (c: Context) => {
+	return c.json({
+		status: 'Wohoo API Works!',
+	});
+}
+);
 export default app;
