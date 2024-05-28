@@ -1,5 +1,6 @@
 import { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
+import { decode, sign, verify } from 'hono/jwt';
 
 export default async function create(c: Context) {
 	let body;
@@ -12,25 +13,19 @@ export default async function create(c: Context) {
 		throw new HTTPException(401, { message: 'Missing required fields' });
 	}
 
+	const secret = c.env.SECRET;
+	const token = body.token;
+
+	const decodedPayload = await verify(token, secret);
+
+	if (!decodedPayload) {
+		throw new HTTPException(401, { message: 'Invalid token' });
+	}
 	const emailPattern = /^[a-zA-Z]+\d{2}[a-zA-Z]{3}\d{1,3}@iiitkottayam\.ac\.in$/;
 	if (!emailPattern.test(body.email)) {
 		throw new HTTPException(401);
 	}
 
-	// let userToken = body.token;
-	// const token_stmt = `SELECT email FROM users WHERE token = $1`;
-	// const token_values = [userToken];
-	// let token_email;
-
-	// try {
-	// 	const res = await c.env.DB.prepare.query(token_stmt, token_values);
-	// 	token_email = res.rows[0].email;
-	// } catch (e) {
-	// 	throw new HTTPException(500);
-	// }
-	// if (token_email !== body.email) {
-	// 	throw new HTTPException(401);
-	// }
 	const stmt = `INSERT INTO port0_prod (email, token, keyHash, aes256Bit, salt) VALUES ($1, $2, $3, $4, $5)`;
 
 	try {
