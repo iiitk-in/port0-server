@@ -15,15 +15,16 @@ export default async function create(c: Context) {
 
 	const secret = c.env.SECRET;
 	const token = body.token;
-
-	const decodedPayload = await verify(token, secret);
-
-	if (!decodedPayload) {
+	let decodedPayload;
+	try {
+		decodedPayload = await verify(token, secret);
+	} catch (e) {
 		throw new HTTPException(401, { message: 'Invalid token' });
 	}
+
 	const emailPattern = /^[a-zA-Z]+\d{2}[a-zA-Z]{3}\d{1,3}@iiitkottayam\.ac\.in$/;
 	if (!emailPattern.test(body.email)) {
-		throw new HTTPException(401);
+		throw new HTTPException(401, { message: 'Invalid email' });
 	}
 
 	const stmt = `INSERT INTO port0_prod (email, token, keyHash, aes256Bit, salt) VALUES ($1, $2, $3, $4, $5)`;

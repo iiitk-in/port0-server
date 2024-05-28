@@ -28,7 +28,6 @@ app.get('/', (c: Context) => {
 	return c.json({
 		status: 'Wohoo API Works!',
 	});
-}
-);
+});
 
 export default app;
