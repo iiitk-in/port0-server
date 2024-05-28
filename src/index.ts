@@ -1,8 +1,8 @@
 import { Context, Hono } from 'hono';
 import register from './handlers/register';
 import verify from './handlers/verify';
-import create from 'handlers/create';
-import issueToken from 'handlers/issueToken';
+import create from './handlers/create';
+import issueToken from './handlers/issueToken';
 import { cors } from 'hono/cors';
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type Env = {
