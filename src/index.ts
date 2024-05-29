@@ -5,11 +5,10 @@ import create from './handlers/create';
 import issueToken from './handlers/issueToken';
 import { cors } from 'hono/cors';
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type Env = {
-	DATABASE_URL: string;
+type Env = {
+	DB: D1Database;
 	SECRET: string;
 };
-
 const app = new Hono<{ Bindings: Env }>();
 
 app.use(
