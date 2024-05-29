@@ -3,7 +3,7 @@ import { HTTPException } from 'hono/http-exception';
 import jwt from '@tsndr/cloudflare-worker-jwt';
 
 async function createJWT(email: string) {
-	const token = await jwt.sign({ email }, 'secret');
+	const token = await jwt.sign({ aud: email }, 'secret');
 	return token;
 }
 
