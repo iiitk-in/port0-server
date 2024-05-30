@@ -12,6 +12,10 @@ export default async function issueToken(c: Context) {
 	if (!body.email) {
 		throw new HTTPException(401, { message: 'Missing required fields' });
 	}
+	const emailRegex = /^[a-zA-Z]+\d{2}[a-zA-Z]{3}\d{1,3}@iiitkottayam\.ac\.in$/;
+	if (!emailRegex.test(body.email)) {
+		throw new HTTPException(401, { message: 'Invalid email' });
+	}
 	const secret = c.env.SECRET;
 	const token = await sign({ email: body.email }, secret);
 	return c.json({
