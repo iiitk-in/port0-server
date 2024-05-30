@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { decode, sign, verify } from 'hono/jwt';
+import { sign } from 'hono/jwt';
 
 export default async function issueToken(c: Context) {
 	let body;

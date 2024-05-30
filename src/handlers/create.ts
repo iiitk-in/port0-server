@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { decode, sign, verify } from 'hono/jwt';
+import { verify } from 'hono/jwt';
 
 export default async function create(c: Context) {
 	let body;
@@ -18,6 +18,9 @@ export default async function create(c: Context) {
 	let decodedPayload;
 	try {
 		decodedPayload = await verify(token, secret);
+		if (decodedPayload.email != body.email) {
+			throw new HTTPException(401, { message: 'Invalid token' });
+		}
 	} catch (e) {
 		throw new HTTPException(401, { message: 'Invalid token' });
 	}
@@ -40,8 +43,8 @@ export default async function create(c: Context) {
 
 	try {
 		await c.env.DB.prepare(stmt).bind(body.email, body.token, body.keyHash, body.aes256Bit, body.salt).run();
-	} catch (e: any) {
-		throw new HTTPException(500, { message: e.message });
+	} catch (e) {
+		throw new HTTPException(500, { message: `Database error` });
 	}
 
 	return c.json({
