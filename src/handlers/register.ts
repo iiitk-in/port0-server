@@ -8,6 +8,7 @@ function getRandomDigit() {
 }
 function sendOTP(email: string, otp: string) {
 	// Send OTP to email
+	console.log(`OTP for ${email}: ${otp}`);
 	return true;
 }
 
@@ -25,8 +26,8 @@ export default async function register(c: Context) {
 		throw new HTTPException(400);
 	}
 	const otp = Array.from({ length: 6 }, getRandomDigit).join('');
-	sendOTP(email, otp);
 
+	sendOTP(email, otp);
 	return c.json({
 		status: 'success',
 		data: null,

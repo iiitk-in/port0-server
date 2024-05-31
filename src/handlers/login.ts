@@ -2,14 +2,14 @@ import { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { verify } from 'hono/jwt';
 
-export default async function create(c: Context) {
+export default async function login(c: Context) {
 	let body;
 	try {
 		body = await c.req.json();
 	} catch (e) {
 		throw new HTTPException(400);
 	}
-	if (!body.email || !body.token || !body.keyHash || !body.aes256Bit || !body.salt) {
+	if (!body.email || !body.token || !body.password) {
 		throw new HTTPException(401, { message: 'Missing required fields' });
 	}
 
@@ -29,25 +29,27 @@ export default async function create(c: Context) {
 	if (!emailPattern.test(body.email)) {
 		throw new HTTPException(401, { message: 'Invalid email' });
 	}
-	// const stmt2 = `SELECT * FROM port0_prod WHERE email = $1`;
-	// let result: object[];
-	// try {
-	// 	result = await c.env.DB.prepare(stmt2).bind(body.email).run();
 
-	// } catch (e: any) {
-	// 	throw new HTTPException(500, { message: e.message });
-	// }
-	//Add some way for checking duplicate registrations later
+	const stmt = `SELECT * FROM port0_prod WHERE email = $1`;
 
-	const stmt = `INSERT INTO port0_prod (email, token, keyHash, aes256Bit, salt) VALUES ($1, $2, $3, $4, $5)`;
-
+	let result;
 	try {
-		await c.env.DB.prepare(stmt).bind(body.email, body.token, body.keyHash, body.aes256Bit, body.salt).run();
+		result = await c.env.DB.prepare(stmt).bind(body.email).run();
 	} catch (e) {
 		throw new HTTPException(500, { message: `Database error` });
 	}
 
+	if (!result) {
+		throw new HTTPException(401, { message: 'Invalid email or token' });
+	}
+
+	if (result.results[0].keyHash != body.password) {
+		throw new HTTPException(401, { message: `Incorrect password` });
+	}
+
 	return c.json({
-		status: 'success',
+		status: 'Login Successfull',
+		aes256Bit: result.results[0].aes256Bit,
+		salt: result.results[0].salt,
 	});
 }

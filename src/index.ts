@@ -4,6 +4,7 @@ import verify from './handlers/verify';
 import create from './handlers/create';
 import issueToken from './handlers/issueToken';
 import { cors } from 'hono/cors';
+import login from './handlers/login';
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type Env = {
 	DATABASE_URL: string;
@@ -24,6 +25,7 @@ app.post('/auth/register', register);
 app.post('/auth/verify', verify);
 app.post('/auth/create', create); // New route
 app.post('/auth/issueToken', issueToken); // New route
+app.post('/auth/login', login);
 app.get('/', (c: Context) => {
 	return c.json({
 		status: 'Wohoo API Works!',
