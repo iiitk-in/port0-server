@@ -29,15 +29,17 @@ export default async function create(c: Context) {
 	if (!emailPattern.test(body.email)) {
 		throw new HTTPException(401, { message: 'Invalid email' });
 	}
-	// const stmt2 = `SELECT * FROM port0_prod WHERE email = $1`;
-	// let result: object[];
-	// try {
-	// 	result = await c.env.DB.prepare(stmt2).bind(body.email).run();
 
-	// } catch (e: any) {
-	// 	throw new HTTPException(500, { message: e.message });
-	// }
-	//Add some way for checking duplicate registrations later
+	const stmt2 = `SELECT * FROM port0_prod WHERE email = $1`;
+	let result;
+	try {
+		result = await c.env.DB.prepare(stmt2).bind(body.email).run();
+	} catch (e) {
+		throw new HTTPException(500, { message: `Server Error!` });
+	}
+	if (result.results.length > 0) {
+		throw new HTTPException(409, { message: 'User already exists' });
+	}
 
 	const stmt = `INSERT INTO port0_prod (email, token, keyHash, aes256Bit, salt) VALUES ($1, $2, $3, $4, $5)`;
 
