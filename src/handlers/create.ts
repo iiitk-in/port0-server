@@ -38,7 +38,7 @@ export default async function create(c: Context) {
 		throw new HTTPException(500, { message: `Server Error!` });
 	}
 	if (result.results.length > 0) {
-		throw new HTTPException(401, { message: 'User already exists' });
+		throw new HTTPException(409, { message: 'User already exists' });
 	}
 
 	const stmt = `INSERT INTO port0_prod (email, token, keyHash, aes256Bit, salt) VALUES ($1, $2, $3, $4, $5)`;
