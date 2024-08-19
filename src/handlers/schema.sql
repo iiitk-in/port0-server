@@ -1,4 +1,6 @@
-CREATE TABLE new_port0_prod (
+DROP TABLE users;
+
+CREATE TABLE new_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     otp TEXT,
     email TEXT,
@@ -10,18 +12,18 @@ CREATE TABLE new_port0_prod (
 );
 
 INSERT INTO
-    new_port0_prod (email, token, keyHash, aes256Bit, salt, verified)
-SELECT
-    email,
-    token,
-    keyHash,
-    aes256Bit,
-    salt
-    verified
-FROM
-    port0_prod;
+    new_users (email, token, keyHash, aes256Bit, salt, verified)
+ SELECT
+     email,
+     token,
+     keyHash,
+     aes256Bit,
+     salt
+     verified
+ FROM
+     port0_prod;
 
-DROP TABLE port0_prod;
+ DROP TABLE users; 
 
 ALTER TABLE
-    new_port0_prod RENAME TO port0_prod;
+    new_users RENAME TO users;

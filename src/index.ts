@@ -17,8 +17,16 @@ app.use(
 
 app.post('/auth/register', register);
 app.post('/auth/verify', verify);
-app.post('/auth/create', create); // New route
-app.post('/auth/issueToken', issueToken); // New route
+app.post('/auth/create', create);
+app.post('/auth/issueToken', issueToken); // are you sure??
+/*
+
+app.post('/auth/refresh', refresh);
+app.post('/auth/access', access);
+app.post('/getVault', getVault);
+app.post('/updateVault', updateVault);
+*/
+
 app.get('/', (c: Context<{ Bindings: Env }>) => {
 	return c.json({
 		status: 'healthy',
